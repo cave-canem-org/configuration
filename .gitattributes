@@ -1,0 +1,11 @@
+**/*.key filter=git-crypt diff=git-crypt
+
+/easy-wg-quick/** filter=git-crypt diff=git-crypt
+
+/docker-compose/matrix/data filter=git-crypt diff=git-crypt
+/docker-compose/matrix/.env.db filter=git-crypt diff=git-crypt
+
+/docker-compose/newsmailer/build/newsapi.sh filter=git-crypt diff=git-crypt
+/docker-compose/newsmailer/data/ironzorg/msmtp/msmtprc filter=git-crypt diff=git-crypt
+
+/docker-compose/gitea/.env filter=git-crypt diff=git-crypt
