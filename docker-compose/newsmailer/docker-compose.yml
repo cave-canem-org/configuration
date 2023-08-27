@@ -1,0 +1,13 @@
+version: "3.3"
+services:
+    newsmailer:
+        image: "newsmailer:${VERSION_NEWSMAILER}"
+        volumes:
+            - "./data:/data"
+        restart: unless-stopped
+        build:
+            context: ./build
+            args:
+                - VERSION_NEWSBOAT_SENDMAIL=${VERSION_NEWSBOAT_SENDMAIL}
+                - VERSION_SENDMAIL_TRYQUEUE=${VERSION_SENDMAIL_TRYQUEUE}
+                - VERSION_NEWS2RSS=${VERSION_NEWS2RSS}
