@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+    link-bot:
+        image: "link-bot:${VERSION_LINK_BOT}"
+        volumes:
+            - "./link_bot-${VERSION_LINK_BOT}.cfg:/link_bot.cfg:ro"
+        restart: unless-stopped
+        build:
+            context: ./build
+            args:
+                - VERSION_LINK_BOT=${VERSION_LINK_BOT}
