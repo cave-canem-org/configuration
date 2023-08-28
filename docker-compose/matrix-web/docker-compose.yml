@@ -1,0 +1,13 @@
+---
+
+version: "3"
+
+services:
+    element:
+        image: "vectorim/element-web:v${VERSION_ELEMENT}"
+        ports:
+            - "127.0.0.1:10200:80"
+        volumes:
+            # https://github.com/vector-im/element-web/blob/develop/docs/config.md
+            # https://raw.githubusercontent.com/vector-im/element-web/v${VERSION_ELEMENT}/config.sample.json
+            - "./config-${VERSION_ELEMENT}.json:/app/config.json:ro"
