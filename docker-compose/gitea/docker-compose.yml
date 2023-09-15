@@ -1,0 +1,38 @@
+---
+
+version: "3"
+
+services:
+    gitea:
+        image: gitea/gitea:${VERSION_GITEA}
+        environment:
+            - "USER_UID=${UID_GITEA}"
+            - "USER_GID=${GID_GITEA}"
+            - "GITEA__database__DB_TYPE=postgres"
+            - "GITEA__database__HOST=db:5432"
+            - "GITEA__database__NAME=gitea"
+            - "GITEA__database__USER=${POSTGRES_USER}"
+            - "GITEA__database__PASSWD=${POSTGRES_PASSWORD}"
+        volumes:
+            - "./data/gitea:/data"
+            - "/etc/timezone:/etc/timezone:ro"
+            - "/etc/localtime:/etc/localtime:ro"
+        ports:
+            - "10300:3000"
+            - "10301:22"
+        depends_on:
+            - db
+
+    db:
+        image: "postgres:${VERSION_POSTGRES}-alpine"
+        environment:
+            - "POSTGRES_USER=${POSTGRES_USER}"
+            - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+            - "POSTGRES_DB=gitea"
+        user: "${UID_POSTGRES}:${GID_POSTGRES}"
+        # c.f. way #2 https://hub.docker.com/_/postgres
+        volumes:
+            - "/etc/passwd:/etc/passwd:ro"
+            - "./data/db:/var/lib/postgresql/data"
+        expose:
+            - 5432
