@@ -1,0 +1,97 @@
+version: "3.3"
+services:
+    synapse:
+        # new user: register_new_matrix_user -c /data/homeserver.yaml http://localhost:8008
+        image: "matrixdotorg/synapse:v${VERSION_SYNAPSE}"
+        expose:
+            - 8008
+        volumes:
+            - "./data/synapse:/data"
+            # https://github.com/devture/matrix-synapse-shared-secret-auth
+            - "./data/matrix-synapse-shared-secret-auth/v${VERSION_SHARED_SECRET_AUTHENTICATOR}/shared_secret_authenticator.py:/usr/local/lib/python3.11/site-packages/shared_secret_authenticator.py"
+            # https://github.com/ma1uta/matrix-synapse-rest-password-provider
+            - "./data/matrix-synapse-rest-password-provider/rest_auth_provider.py:/usr/local/lib/python3.11/site-packages/rest_auth_provider.py"
+            - "data-heisenbridge:/data-heisenbridge:ro"
+            - "data-telegram:/data-telegram:ro"
+            - "data-whatsapp:/data-whatsapp:ro"
+        environment:
+            - "UID=${UID_SYNAPSE}"
+            - "GID=${GID_SYNAPSE}"
+        healthcheck:
+            test: curl -f http://localhost:8008/health
+        depends_on:
+            - db
+
+    db:
+        image: "postgres:${VERSION_POSTGRES}-alpine"
+        env_file: .env.db
+        environment:
+            - POSTGRES_USER=synapse
+            # Set database encoding to UTF-8
+            - POSTGRES_INITDB_ARGS=--encoding=UTF-8 --lc-collate=C --lc-ctype=C
+        # c.f. way #2 https://hub.docker.com/_/postgres
+        volumes:
+            - "/etc/passwd:/etc/passwd:ro"
+            - "./data/db:/var/lib/postgresql/data"
+        user: "${UID_POSTGRES}:${GID_POSTGRES}"
+        expose:
+            - 5432
+
+    corporal:
+        image: "devture/matrix-corporal:${VERSION_CORPORAL}"
+        ports:
+            - "127.0.0.1:10100:41080"
+        expose:
+            - 41080
+        volumes:
+            - "./data/corporal/config.json:/config.json:ro"
+            - "./data/corporal/policy.json:/policy.json:ro"
+        depends_on:
+            - synapse
+
+    synapse-admin:
+        image: "awesometechnologies/synapse-admin:${VERSION_SYNAPSE_ADMIN}"
+        ports:
+            # CORS errors when trying to connect over SSH tunnel
+            - "127.0.0.1:10101:80"
+        # XXX: May not be needed
+#        expose:
+#            - 80
+        depends_on:
+            - synapse
+
+    heisenbridge:
+        image: "hif1/heisenbridge:${VERSION_HEISENBRIDGE}"
+        command: -v -c /data/heisenbridge.yml -o "@matrix-corporal:cave-canem.org" http://synapse:8008/
+        expose:
+            - 9898
+        volumes:
+            - "data-heisenbridge:/data:ro"
+        depends_on:
+            - synapse
+
+    telegram:
+        image: "dock.mau.dev/mautrix/telegram:v${VERSION_TELEGRAM}"
+        expose:
+            - 29317
+        volumes:
+            - "data-telegram:/data"
+        depends_on:
+            - synapse
+
+    whatsapp:
+        image: "dock.mau.dev/mautrix/whatsapp:v${VERSION_WHATSAPP}"
+        expose:
+            - 29318
+        volumes:
+            - "data-whatsapp:/data"
+        depends_on:
+            - synapse
+
+volumes:
+    data-heisenbridge:
+        external: true
+    data-telegram:
+        external: true
+    data-whatsapp:
+        external: true
