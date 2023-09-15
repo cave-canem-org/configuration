@@ -1,12 +1,12 @@
 # Matrix configuration instructions
 
-Follow the above instructions to allow the Matrix node and its components to
+Follow the below instructions to allow the Matrix node and its components to
 run.
 
 Note that configuration files must be glossed over and potentially further
 edited, as not all configuration operations necessary are documented here.
 
-1. Set the proper UID/GID in .env: match the current user’s IDs to make backing up easier
+1. Set the proper UID/GID in .env (to match the current user’s IDs to make backing up easier) and create `data/db`
 2. Generate the homeserver configuration
 
 	docker run --rm -ti -v `pwd`/data/synapse:/data -e SYNAPSE_SERVER_NAME=cave-canem.org -e SYNAPSE_REPORT_STATS=no -e UID=${UID_SYNAPSE} -e GID=${GID_SYNAPSE} matrixdotorg/synapse:v${VERSION_SYNAPSE} generate
