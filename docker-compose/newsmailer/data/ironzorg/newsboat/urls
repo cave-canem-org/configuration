@@ -1,7 +1,6 @@
 https://torrentfreak.com/feed/
 https://feeds.arstechnica.com/arstechnica/index
 https://meduza.io/rss/en/all
-http://localhost:8080/rss/top/sources/associated-press
 http://localhost:8080/rss/top/sources/bbc-news
 https://news.ycombinator.com/rss
 https://www.vinography.com/feed
@@ -10,3 +9,4 @@ https://www.tor.com/feed
 https://litreactor.com/rss.xml
 https://michaelshermer.substack.com/feed
 https://www.thisishorror.co.uk/feed/
+https://zaptele.fr/category/zap-actu/feed/
