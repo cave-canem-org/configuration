@@ -1,0 +1,19 @@
+---
+
+version: "3"
+
+services:
+    transmission:
+        image: linuxserver/transmission:${VERSION_TRANSMISSION}
+        environment:
+            - "PUID=${UID_TRANSMISSION}"
+            - "PGID=${GID_TRANSMISSION}"
+            - "TZ=Etc/UTC"
+        volumes:
+            - "./data/config:/config"
+            - "./data/downloads:/downloads"
+            - "./data/watch:/watch"
+        ports:
+            - "127.0.0.1:9091:9091"
+            - "51413:51413"
+            - "51413:51413/udp"
