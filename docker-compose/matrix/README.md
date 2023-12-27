@@ -56,6 +56,7 @@ edited, as not all configuration operations necessary are documented here.
         domain: cave-canem.org
     appservice:
         address: http://telegram:29317
+        port: 29317
         database: sqlite:/data/mautrix_telegram.sqlite
         provisioning:
             shared_secret: …
@@ -92,6 +93,7 @@ edited, as not all configuration operations necessary are documented here.
         domain: cave-canem.org
     appservice:
         address: http://whatsapp:29318
+        port: 29318
         database:
             type: sqlite3-fk-wal
             uri: file:///data/mautrix_whatsapp.sqlite?_txlock=immediate
@@ -116,3 +118,46 @@ edited, as not all configuration operations necessary are documented here.
 	sudo chmod 644 /var/lib/docker/volumes/data-whatsapp/_data/registration.yaml
 
 19. Edit the homeserver configuration to add Mautrix WhatsApp to it
+
+20. Generate the Mautrix Signal configuration:
+
+	docker volume create data-signal
+	docker run --rm -ti -v data-signal:/data dock.mau.dev/mautrix/signal:v${VERSION_SIGNAL}
+
+21. Modify the configuration file:
+
+	docker volume inspect data-signal | jq -r '.[0].Mountpoint'
+	sudo -e /var/lib/docker/volumes/data-signal/_data/config.yaml
+
+    ```
+    homeserver:
+        address: http://synapse:8008/
+        domain: cave-canem.org
+    appservice:
+        address: http://signal:29319
+        port: 29319
+        database:
+            type: sqlite3-fk-wal
+            uri: file:///data/mautrix_signal.sqlite?_txlock=immediate
+    bridge:
+        displayname_template: '{{or .ProfileName .PhoneNumber "Unknown user"}} (Signal)'
+        double_puppet_server_map:
+            cave-canem.org: http://synapse:8008/
+        login_shared_secret_map:
+            cave-canem.org: …
+    permissions:
+        "*": relay
+        "cave-canem.org": "user"
+        "@matrix-corporal:cave-canem.org": "admin"
+    ```
+
+22. Generate the Mautrix Signal manifest:
+
+	docker run --rm -ti -v data-signal:/data dock.mau.dev/mautrix/signal:v${VERSION_SIGNAL}
+
+23. Fix the permissions of the WhatsApp manifest:
+
+	docker volume inspect data-whatsapp | jq -r '.[0].Mountpoint'
+	sudo chmod 644 /var/lib/docker/volumes/data-signal/_data/registration.yaml
+
+24. Edit the homeserver configuration to add Mautrix Signal to it

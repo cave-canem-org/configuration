@@ -14,6 +14,7 @@ services:
             - "data-heisenbridge:/data-heisenbridge:ro"
             - "data-telegram:/data-telegram:ro"
             - "data-whatsapp:/data-whatsapp:ro"
+            - "data-signal:/data-signal:ro"
         environment:
             - "UID=${UID_SYNAPSE}"
             - "GID=${GID_SYNAPSE}"
@@ -88,10 +89,22 @@ services:
         depends_on:
             - synapse
 
+    signal:
+        # FIXME: Pull the proper version once released
+        image: "dock.mau.dev/mautrix/signal:latest"
+        expose:
+            - 29319
+        volumes:
+            - "data-signal:/data"
+        depends_on:
+            - synapse
+
 volumes:
     data-heisenbridge:
         external: true
     data-telegram:
         external: true
     data-whatsapp:
+        external: true
+    data-signal:
         external: true
