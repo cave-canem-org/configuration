@@ -11,3 +11,5 @@
 /docker-compose/newsmailer/data/ironzorg/msmtp/msmtprc filter=git-crypt diff=git-crypt
 
 /docker-compose/gitea/.env filter=git-crypt diff=git-crypt
+
+/docker-compose/shiori/.env filter=git-crypt diff=git-crypt
