@@ -1,0 +1,13 @@
+---
+
+version: "3"
+
+services:
+    shiori:
+        image: "ghcr.io/go-shiori/shiori:v${VERSION_SHIORI}"
+        ports:
+            - "127.0.0.1:10400:8080"
+        volumes:
+            - ./data:/shiori
+        environment:
+            - "SHIORI_HTTP_SECRET_KEY=${SHIORI_HTTP_SECRET_KEY}"
