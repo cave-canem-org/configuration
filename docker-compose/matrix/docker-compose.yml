@@ -90,8 +90,7 @@ services:
             - synapse
 
     signal:
-        # FIXME: Pull the proper version once released
-        image: "dock.mau.dev/mautrix/signal:latest"
+        image: "dock.mau.dev/mautrix/signal:v${VERSION_SIGNAL}"
         expose:
             - 29319
         volumes:
