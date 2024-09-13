@@ -71,6 +71,18 @@ services:
         depends_on:
             - synapse
 
+    heisenbridge-media-proxy:
+        image: "hif1/heisenbridge:${VERSION_HEISENBRIDGE}"
+        command: -v --media-proxy -p 9899 -c /data/heisenbridge.yml -o "@matrix-corporal:cave-canem.org" http://synapse:8008/
+        ports:
+            - "127.0.0.1:10102:9899"
+        expose:
+            - 9899
+        volumes:
+            - "data-heisenbridge:/data:ro"
+        depends_on:
+            - synapse
+
     telegram:
         image: "dock.mau.dev/mautrix/telegram:v${VERSION_TELEGRAM}"
         expose:
