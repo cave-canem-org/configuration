@@ -13,3 +13,6 @@
 /docker-compose/gitea/.env filter=git-crypt diff=git-crypt
 
 /docker-compose/shiori/.env filter=git-crypt diff=git-crypt
+
+/docker-compose/archivebox/.env filter=git-crypt diff=git-crypt
+/docker-compose/archivebox/sonic-v*.cfg filter=git-crypt diff=git-crypt
