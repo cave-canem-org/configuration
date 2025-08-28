@@ -16,9 +16,29 @@ edited, as not all configuration operations necessary are documented here.
 
 	https://github.com/devture/matrix-synapse-shared-secret-auth
 
+4.a. If starting the `synapse` container fails with the following error:
+
+	ModuleNotFoundError: No module named 'shared_secret_authenticator'
+
+    Check the version of Python used in the stacktrace, for example:
+
+    File "/usr/local/lib/python3.12/importlib/__init__.py", line 90, in import_module
+
+    And adjust the mountpoint for the `shared_secret_authenticator.py` file in `docker-compose.yaml`.
+
 5. Download `matrix-synapse-rest-password-provider` and place into the appropriate directory:
 
 	https://github.com/ma1uta/matrix-synapse-rest-password-provider
+
+5.a. If starting the `synapse` container fails with the following error:
+
+	ModuleNotFoundError: No module named 'rest_auth_provider'
+
+    Check the version of Python used in the stacktrace, for example:
+
+    File "/usr/local/lib/python3.12/importlib/__init__.py", line 90, in import_module
+
+    And adjust the mountpoint for the `rest_auth_provider.py` file in `docker-compose.yaml`.
 
 6. Create the Corporal user, with admin privileges:
 
